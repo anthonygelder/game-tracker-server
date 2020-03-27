@@ -11,7 +11,7 @@ const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
   : 'common';
 
-app.use(morgan(morganOption))
+app.use(morgan('dev'))
 app.use(helmet())
 app.use(cors())
 
@@ -29,5 +29,9 @@ app.use(function errorHandler(error, req, res, next) {
   }
   res.status(500).json(response)
 })
+
+app.listen(8000, () => {
+  console.log('Express server is listening on port 8000!');
+});
 
 module.exports = app
