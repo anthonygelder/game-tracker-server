@@ -1,9 +1,13 @@
-CREATE TABLE games (
+CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    game TEXT NOT NULL,
-    status TEXT NOT NULL,
+    user_name TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    user_email VARCHAR(320),
     date_created TIMESTAMP NOT NULL DEFAULT now()
 );
 
+
 ALTER TABLE games
-    ADD user_id INTEGER REFERENCES users(id) ON DELETE SET NULL;
+    ADD COLUMN
+        user_id INTEGER REFERENCES users(id) 
+        ON DELETE SET NULL;
