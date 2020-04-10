@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --require test/setup.js",
-    "start": "nodemon src/app.js",
+    "start": "nodemon src/server.js",
     "predeploy": "npm audit",
     "deploy": "git push heroku master"
   },
