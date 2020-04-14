@@ -25,8 +25,21 @@ app.get('/games', (req, res, next) => {
     .catch(next)
 })
 
-app.get('/', (req, res) => {
-  res.send('Hello, world!')
+app.get('/games/:game_id', (req, res, next) => {
+  const knexInstance = req.app.get('db')
+  GamesService.getById(knexInstance, req.params.game_id)
+    .then(game => {
+      res.json({
+        id: game.id,
+        game: game.game,
+        style: game.style,
+        status: game.status,
+        rating: null,
+        user_id: null,
+        date_created: new Date(game.date_created),
+      })
+    })
+    .catch(next)
 })
 
 app.use(function errorHandler(error, req, res, next) {

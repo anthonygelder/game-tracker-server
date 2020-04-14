@@ -1,6 +1,7 @@
 const { expect } = require('chai')
 const knex = require('knex')
 const app = require('../src/app')
+const { makeGamesArray } = require('./games.fixtures')
 
 describe.only('Games Endpoints', function() {
     let db
@@ -17,41 +18,10 @@ describe.only('Games Endpoints', function() {
   
     before('clean the table', () => db('games').truncate())
 
+    afterEach('cleanup', () => db('games').truncate())
+
     context('Given there are games in the database', () => {
-        const testGames = [
-        {
-            id: 1,
-            game: 'First test post!',
-            status: 'How-to',
-            rating: null,
-            user_id: null,
-            date_created: '2029-01-22T16:28:32.615Z'
-        },
-        {
-            id: 2,
-            game: 'Second test post!',
-            status: 'News',
-            rating: null,
-            user_id: null,
-            date_created: '2029-01-22T16:28:32.615Z'
-        },
-        {
-            id: 3,
-            game: 'Third test post!',
-            status: 'Listicle',
-            rating: null,
-            user_id: null,
-            date_created: '2029-01-22T16:28:32.615Z'
-        },
-        {
-            id: 4,
-            game: 'Fourth test post!',
-            status: 'Story',
-            rating: null,
-            user_id: null,
-            date_created: '2029-01-22T16:28:32.615Z'
-        },
-        ];
+        const testGames = makeGamesArray()
     
         beforeEach('insert games', () => {
         return db
@@ -63,6 +33,14 @@ describe.only('Games Endpoints', function() {
             return supertest(app)
                 .get('/games')
                 .expect(200, testGames)
+        })
+
+        it('GET /games/:game_id responds with 200 and the specified game', () => {
+            const gameId = 2
+            const expectedGame = testGames[gameId - 1]
+            return supertest(app)
+                .get(`/games/${gameId}`)
+                .expect(200, expectedGame)
         })
     })
 })
