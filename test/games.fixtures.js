@@ -6,7 +6,7 @@ function makeGamesArray() {
             status: 'How-to',
             rating: null,
             user_id: null,
-            date_created: '2029-01-22T16:28:32.615Z'
+            date_created: new Date(),
         },
         {
             id: 2,
@@ -14,7 +14,7 @@ function makeGamesArray() {
             status: 'News',
             rating: null,
             user_id: null,
-            date_created: '2029-01-22T16:28:32.615Z'
+            date_created: new Date(),
         },
         {
             id: 3,
@@ -22,7 +22,7 @@ function makeGamesArray() {
             status: 'Listicle',
             rating: null,
             user_id: null,
-            date_created: '2029-01-22T16:28:32.615Z'
+            date_created: new Date(),
         },
         {
             id: 4,
@@ -30,7 +30,7 @@ function makeGamesArray() {
             status: 'Story',
             rating: null,
             user_id: null,
-            date_created: '2029-01-22T16:28:32.615Z'
+            date_created: new Date(),
         }
     ]
 }
