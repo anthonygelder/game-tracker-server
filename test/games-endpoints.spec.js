@@ -46,7 +46,7 @@ describe.only('Games Endpoints', function() {
         })
     })
 
-    describe(`GET /games/:game_id`, () => {
+    describe.only(`GET /games/:game_id`, () => {
         context(`Given no games`, () => {
             it(`responds with 404`, () => {
                 const gameId = 123456
@@ -73,9 +73,33 @@ describe.only('Games Endpoints', function() {
                     .expect(200, expectedGame)
             })
         })
+        
+        context.only(`Given an XSS attack games`, () => {
+            const maliciousGame = {
+                id: 911,
+                game: 'Naughty naughty very naughty <script>alert("xss");</script>',
+                status: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`
+            }
+            
+            beforeEach('insert malicious game', () => {
+                return db
+                .into('games')
+                .insert([ maliciousGame ])
+            })
+            
+            it('removes XSS attack content', () => {
+                return supertest(app)
+                .get(`/games/${maliciousGame.id}`)
+                .expect(200)
+                .expect(res => {
+                    expect(res.body.game).to.eql('Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;')
+                    expect(res.body.status).to.eql(`Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`)
+                })
+            })
+        })
     })
 
-    describe.only(`POST /games`, () => {
+    describe(`POST /games`, () => {
         it(`creates a game and responds with 201 and the game`, function() {
             this.retries(3)
             const newGame = {
@@ -100,6 +124,26 @@ describe.only('Games Endpoints', function() {
                         .get(`/games/${postRes.body.id}`)
                         .expect(postRes.body)
                 )
+        })
+
+        const requiredFields = ['game', 'status']
+
+        requiredFields.forEach(field => {
+            const newGame = {
+                game: 'Status',
+                status: 'Status',
+            }
+            
+            it(`responds with 400 and an error message when the '${field}' is missing`, () => {
+                delete newGame[field]
+            
+                return supertest(app)
+                .post('/games')
+                .send(newGame)
+                .expect(400, {
+                    error: { message: `Missing '${field}' in request body` }
+                })
+            })
         })
     })
 })
