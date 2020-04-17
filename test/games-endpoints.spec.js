@@ -46,7 +46,7 @@ describe.only('Games Endpoints', function() {
         })
     })
 
-    describe.only(`GET /games/:game_id`, () => {
+    describe(`GET /games/:game_id`, () => {
         context(`Given no games`, () => {
             it(`responds with 404`, () => {
                 const gameId = 123456
@@ -73,8 +73,8 @@ describe.only('Games Endpoints', function() {
                     .expect(200, expectedGame)
             })
         })
-        
-        context.only(`Given an XSS attack games`, () => {
+
+        context(`Given an XSS attack games`, () => {
             const maliciousGame = {
                 id: 911,
                 game: 'Naughty naughty very naughty <script>alert("xss");</script>',
@@ -143,6 +143,39 @@ describe.only('Games Endpoints', function() {
                 .expect(400, {
                     error: { message: `Missing '${field}' in request body` }
                 })
+            })
+        })
+    })
+
+    describe.only(`DELETE /games/:game_id`, () => {
+        context(`Given no games`, () => {
+            it(`responds with 404`, () => {
+                const gameId = 123456
+                return supertest(app)
+                .delete(`/games/${gameId}`)
+                .expect(404, { error: { message: `Game doesn't exist` } })
+            })
+        })
+        context('Given there are games in the database', () => {
+            const testGames = makeGamesArray()
+        
+            beforeEach('insert games', () => {
+            return db
+                .into('games')
+                .insert(testGames)
+            })
+        
+            it('responds with 204 and removes the game', () => {
+            const idToRemove = 2
+            const expectedGames = testGames.filter(game => game.id !== idToRemove)
+            return supertest(app)
+                .delete(`/games/${idToRemove}`)
+                .expect(204)
+                .then(res =>
+                supertest(app)
+                    .get(`/games`)
+                    .expect(expectedGames)
+                )
             })
         })
     })

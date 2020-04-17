@@ -1,6 +1,6 @@
 const express = require('express')
 const GamesService = require('./games-service')
-
+const xss = require('xss')
 const gamesRouter = express.Router()
 const jsonParser = express.json()
 
@@ -43,28 +43,42 @@ gamesRouter
 
 gamesRouter
     .route('/:game_id')
-    .get((req, res, next) => {
-        const knexInstance = req.app.get('db')
-        GamesService.getById(knexInstance, req.params.game_id)
+    .all((req, res, next) => {
+      GamesService.getById(
+        req.app.get('db'),
+        req.params.game_id
+      )
         .then(game => {
-            if (!game) {
+          if (!game) {
             return res.status(404).json({
-                error: { message: `Game doesn't exist` }
+              error: { message: `Game doesn't exist` }
             })
-            }
-            res.json({
-                id: game.id,
-                game: game.game,
-                style: game.style,
-                status: game.status,
-                rating: null,
-                user_id: null,
-                date_created: new Date(game.date_created),
-            })
+          }
+          res.game = game // save the game for the next middleware
+          next() // don't forget to call next so the next middleware happens!
         })
         .catch(next)
     })
-    
+    .get((req, res, next) => {
+        res.json({
+            id: res.game.id,
+            game: xss(res.game.game),
+            status: xss(res.game.status),
+            rating: res.game.rating,
+            user_id: res.game.user_id,
+            date_created: new Date(game.date_created),
+        })
+    })
+    .delete((req, res, next) => {
+        GamesService.deleteGame(
+            req.app.get('db'),
+            req.params.game_id
+            )
+            .then(() => {
+                res.status(204).end()
+            })
+            .catch(next)
+    })
 
 
 module.exports = gamesRouter
