@@ -16,7 +16,7 @@ app.use(morgan('dev'))
 app.use(helmet())
 app.use(cors())
 
-app.use('/games', gamesRouter)
+app.use('/api/games', gamesRouter)
 
 app.use(function errorHandler(error, req, res, next) {
   let response

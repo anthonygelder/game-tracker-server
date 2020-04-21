@@ -1,3 +1,4 @@
+const path = require('path')
 const express = require('express')
 const GamesService = require('./games-service')
 const xss = require('xss')
@@ -34,7 +35,7 @@ gamesRouter
             .then(game => {
             res
                 .status(201)
-                .location(`/games/${game.id}`)
+                .location(path.posix.join(req.originalUrl + `${game.id}`))
                 .json(game)
             })
             .catch(next)
@@ -79,6 +80,28 @@ gamesRouter
             })
             .catch(next)
     })
+    .patch(jsonParser, (req, res, next) => {
+        const { game, status, rating } = req.body
+        const gameToUpdate = { game, status, rating }
 
+        const numberOfValues = Object.values(gameToUpdate).filter(Boolean).length
+        if (numberOfValues === 0) {
+            return res.status(400).json({
+                error: {
+                    message: `Request body must contain either 'game', 'status' or 'rating'`
+                }
+            })
+        }
+        
+        GamesService.updateGame(
+            req.app.get('db'),
+            req.params.game_id,
+            gameToUpdate
+        )
+        .then(numRowsAffected => {
+            res.status(204).end()
+        })
+        .catch(next)
+    })
 
 module.exports = gamesRouter
