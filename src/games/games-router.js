@@ -17,8 +17,8 @@ gamesRouter
             .catch(next)
         })
     .post(jsonParser, (req, res, next) => {
-        const { game, status } = req.body
-        const newGame = { game, status }
+        const { game, status, year, image } = req.body
+        const newGame = { game, status, year, image }
 
         for (const [key, value] of Object.entries(newGame)) {
             if (value == null) {
@@ -32,7 +32,7 @@ gamesRouter
             req.app.get('db'),
             newGame
         )
-            .then(game => {
+        .then(game => {
             res
                 .status(201)
                 .location(path.posix.join(req.originalUrl + `${game.id}`))
@@ -66,8 +66,10 @@ gamesRouter
             game: xss(res.game.game),
             status: xss(res.game.status),
             rating: res.game.rating,
+            year: res.game.year,
+            image: res.game.image,
             user_id: res.game.user_id,
-            date_created: new Date(game.date_created),
+            // date_created: game.date_created
         })
     })
     .delete((req, res, next) => {
@@ -81,14 +83,14 @@ gamesRouter
             .catch(next)
     })
     .patch(jsonParser, (req, res, next) => {
-        const { game, status, rating } = req.body
-        const gameToUpdate = { game, status, rating }
+        const { game, status, rating, year, image } = req.body
+        const gameToUpdate = { game, status, rating, year, image }
 
         const numberOfValues = Object.values(gameToUpdate).filter(Boolean).length
         if (numberOfValues === 0) {
             return res.status(400).json({
                 error: {
-                    message: `Request body must contain either 'game', 'status' or 'rating'`
+                    message: `Request body must contain either 'game', 'status', 'year', 'image' or 'rating'`
                 }
             })
         }
