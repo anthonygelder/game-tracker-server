@@ -46,7 +46,7 @@ describe.only('Games Endpoints', function() {
         })
     })
 
-    describe(`GET /api/games/:game_id`, () => {
+    describe.only(`GET /api/games/:game_id`, () => {
         context(`Given no games`, () => {
             it(`responds with 404`, () => {
                 const gameId = 123456
@@ -180,7 +180,7 @@ describe.only('Games Endpoints', function() {
         })
     })
 
-    describe.only(`PATCH /api/games/:game_id`, () => {
+    describe(`PATCH /api/games/:game_id`, () => {
         context(`Given no games`, () => {
             it(`responds with 404`, () => {
             const gameId = 123456
@@ -231,10 +231,10 @@ describe.only('Games Endpoints', function() {
                 })
             })
 
-            it(`responds with 204 when updating only a subset of fields`, () => {
+            it.only(`responds with 204 when updating only a subset of fields`, () => {
                 const idToUpdate = 2
                 const updateGame = {
-                    game: 'updated game title',
+                    status: 'updated game status',
                 }
                 const expectedGame = {
                     ...testGames[idToUpdate - 1],
