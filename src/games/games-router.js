@@ -8,17 +8,15 @@ const jsonParser = express.json()
 
 gamesRouter
     .route(`/`)
-    .all(requireAuth)
+    // .all(requireAuth)
     .get((req, res, next) => {
-        GamesService.getAllGames(
-            req.app.get('db')
-            )
+        GamesService.getAllGames(req.app.get('db'))
             .then(games => {
                 res.json(games)
             })
             .catch(next)
         })
-    .post(jsonParser, (req, res, next) => {
+    .post(requireAuth, jsonParser, (req, res, next) => {
         const { game, status, year, image } = req.body
         const newGame = { game, status, year, image }
 
