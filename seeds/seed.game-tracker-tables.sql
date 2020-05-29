@@ -7,12 +7,12 @@ TRUNCATE
 
 INSERT INTO users (user_name, password, user_email)
 VALUES
-    ('dunder', 'password1','dunder@Mifflin.com'),
-    ('b.deboop', 'password2', 'odeep@Deboop.com'),
-    ('c.bloggs', 'password3', 'arlie@Bloggs.com'),
-    ('s.smith', 'password4', 'Sam@Smith.com'),
-    ('lexlor', 'password5', 'Alex@aylor.com'),
-    ('wippy', 'password6', 'Ping@WonIn.com');
+    ('dunder', '$2a$12$.XoP9Ol7.IK.70LrxXxKseYCciE7mqRWqol06lBXEm6ug.Zb.boyC','dunder@Mifflin.com'),
+    ('b.deboop', '$2a$12$3BbSk20y0RRQQd9c73QB..VXcOqqEcspxB3FoeiEiGQRYjZAWGXri', 'odeep@Deboop.com'),
+    ('c.bloggs', '$2a$12$BeymVBvJiJ5srZe98.j5MeVJoRR1PN/WpDEB1plX.CN/zDZNTC1F.', 'arlie@Bloggs.com'),
+    ('s.smith', '$2a$12$2bvwe/j3lDMMYzmC1vmUDu1S2HAQedIe5PGkmFWwk50lP7x31Y/H.', 'Sam@Smith.com'),
+    ('lexlor', '$2a$12$BJG0exE6vugsD9BPxPwkJuu/ruJEkekwFCDycfDuwBcJ8Hi8wH/Ae', 'Alex@aylor.com'),
+    ('wippy', '$2a$12$cnAxuCJUrd7jTxo8rVSNkuzL5Oo7XxpAZinaFEgiTKVaDggjkLWoy', 'Ping@WonIn.com');
 
 INSERT INTO games (game, status, user_id)
 VALUES

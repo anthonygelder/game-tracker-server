@@ -1,7 +1,7 @@
 const AuthService = {
-    getUserWithUserName(db, user_name) {
+    getUserWithUserEmail(db, user_email) {
       return db('users')
-        .where({ user_name })
+        .where({ user_email })
         .first()
     },
     parseBasicToken(token) {
