@@ -16,7 +16,7 @@ gamesRouter
             })
             .catch(next)
         })
-    .post(requireAuth, jsonParser, (req, res, next) => {
+    .post( jsonParser, (req, res, next) => {
         const { game, status, year, image } = req.body
         const newGame = { game, status, year, image }
 
