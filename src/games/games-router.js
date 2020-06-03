@@ -1,7 +1,7 @@
 const path = require('path')
 const express = require('express')
 const GamesService = require('./games-service')
-const { requireAuth } = require('../middleware/basic-auth')
+const { requireAuth } = require('../middleware/jwt-auth')
 const xss = require('xss')
 const gamesRouter = express.Router()
 const jsonParser = express.json()
