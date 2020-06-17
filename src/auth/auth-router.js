@@ -8,7 +8,6 @@ authRouter
 .post('/login', jsonBodyParser, (req, res, next) => {
     const { user_email, password } = req.body
     const loginUser = { user_email, password }
-    console.log(loginUser)
     for (const [key, value] of Object.entries(loginUser))
         if (value == null)
         return res.status(400).json({
@@ -22,24 +21,33 @@ authRouter
     .then(dbUser => {
         if (!dbUser)
         return res.status(400).json({
-            error: 'Incorrect user_email or password',
+            error: 'Incorrect Email or Password.',
         })
     
         return AuthService.comparePasswords(loginUser.password, dbUser.password)
             .then(compareMatch => {
                 if (!compareMatch)
                 return res.status(400).json({
-                    error: 'Incorrect user_email or password',
+                    error: 'Incorrect Email or Password.',
                 })
             
                 const sub = dbUser.user_email
                 const payload = { user_id: dbUser.id }
                 res.send({
+                    userId: payload.user_id,
                     authToken: AuthService.createJwt(sub, payload),
                 })
             })
         })
         .catch(next)
 })
+
+// authRouter.post('/refresh', requireAuth, (req, res) => {
+//     const sub = req.user.user_name
+//     const payload = { user_id: req.user.id }
+//     res.send({
+//         authToken: AuthService.createJwt(sub, payload),
+//     })
+// })
 
 module.exports = authRouter

@@ -28,7 +28,7 @@ gamesRouter
             }
         }
 
-        // newGame.user_id = req.user.id
+        newGame.user_id = req.body.user_id
 
         GamesService.insertGame(
             req.app.get('db'),

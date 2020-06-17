@@ -21,13 +21,13 @@ usersRouter
             return res.status(400).json({ error: passwordError })
         }
         
-        UsersService.hasUserWithUserName(
+        UsersService.hasUserWithUserEmail(
             req.app.get('db'),
-            user_name
+            user_email
         )
-        .then(hasUserWithUserName => {
-            if (hasUserWithUserName) {
-                return res.status(400).json({ error: `Username already taken` })
+        .then(hasUserWithUserEmail => {
+            if (hasUserWithUserEmail) {
+                return res.status(400).json({ error: `User with this email already exists.` })
             }
         
             return UsersService.hashPassword(password)
