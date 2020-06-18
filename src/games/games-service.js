@@ -2,7 +2,9 @@ const GamesService = {
     getAllGames(knex) {
         return knex.select('*').from('games')
     },
-    
+    getAllGamesByUserId(knex, user_id) {
+        return knex.select('*').from('games').where('user_id', user_id)
+    },
     insertGame(knex, newGame) {
         return knex
             .insert(newGame)
@@ -12,21 +14,18 @@ const GamesService = {
                     return rows[0]
                 })
     },
-
     getById(knex, id) {
         return knex.from('games').select('*').where('id', id).first()
     },
-
     deleteGame(knex, id) {
-      return knex('games')
-        .where({ id })
-        .delete()
+        return knex('games')
+            .where({ id })
+            .delete()
     },
-
     updateGame(knex, id, newGameFields) {
-      return knex('games')
-        .where({ id })
-        .update(newGameFields)
+        return knex('games')
+            .where({ id })
+            .update(newGameFields)
     },
 }
 
