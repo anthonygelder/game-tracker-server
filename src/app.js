@@ -14,7 +14,8 @@ const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
   : 'common';
 
-app.use(morgan('dev'))
+const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common'
+app.use(morgan(morganSetting))
 app.use(helmet())
 app.use(cors())
 
@@ -22,13 +23,12 @@ app.use('/api/games', gamesRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
 
-app.use(function errorHandler(error, req, res, next) {
+app.use((error, req, res, next) => {
   let response
-  if (NODE_ENV === 'production') {
-    response = { error: { message: 'server error' } }
+  if (process.env.NODE_ENV === 'production') {
+    response = { error: { message: 'server error' }}
   } else {
-    console.error(error)
-    response = { message: error.message, error }
+    response = { error }
   }
   res.status(500).json(response)
 })

@@ -4,7 +4,6 @@ const config = require('../config')
 
 const AuthService = {
     getUserWithUserEmail(db, user_email) {
-      console.log(user_email)
       return db('users')
         .where({ user_email })
         .first()
@@ -20,7 +19,6 @@ const AuthService = {
       })
     },
     verifyJwt(token) {
-      console.log('verify')
       return jwt.verify(token, config.JWT_SECRET, {
         algorithms: ['HS256'],
       })

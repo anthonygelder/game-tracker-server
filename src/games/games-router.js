@@ -46,7 +46,7 @@ gamesRouter
 
 gamesRouter
     .route('/:game_id')
-    .all(requireAuth)
+    // .all(requireAuth)
     .all((req, res, next) => {
       GamesService.getById(
         req.app.get('db'),
@@ -88,7 +88,6 @@ gamesRouter
     .patch(jsonParser, (req, res, next) => {
         const { game, status, rating, year, image } = req.body
         const gameToUpdate = { game, status, rating, year, image }
-        console.log(gameToUpdate)
         const numberOfValues = Object.values(gameToUpdate).filter(Boolean).length
         if (numberOfValues === 0) {
             return res.status(400).json({
