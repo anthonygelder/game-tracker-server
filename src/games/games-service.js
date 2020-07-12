@@ -6,6 +6,7 @@ const GamesService = {
         return knex.select('*').from('games').where('user_id', user_id)
     },
     insertGame(knex, newGame) {
+        console.log('------------')
         return knex
             .insert(newGame)
             .into('games')

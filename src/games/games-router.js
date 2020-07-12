@@ -10,10 +10,8 @@ gamesRouter
     .route(`/`)
     // .all(requireAuth)
     .get((req, res, next) => {
-        
         GamesService.getAllGamesByUserId(req.app.get('db'),req.headers.user_id)
             .then(games => {
-                console.log(games)
                 res.json(games)
             })
             .catch(next)
@@ -31,8 +29,7 @@ gamesRouter
             }
         }
         newGame.user_id = req.body.user_id
-        console.log('------------')
-        console.log(newGame)
+
         GamesService.insertGame(
             req.app.get('db'),
             newGame
