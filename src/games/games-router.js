@@ -21,7 +21,7 @@ gamesRouter
     .post( jsonParser, (req, res, next) => {
         const { game, status, year, image } = req.body
         const newGame = { game, status, year, image }
-
+        console.log(newGame)
         for (const [key, value] of Object.entries(newGame)) {
             if (value == null) {
                 return res.status(400).json({
