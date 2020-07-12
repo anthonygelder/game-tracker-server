@@ -35,6 +35,7 @@ gamesRouter
             newGame
         )
         .then(game => {
+            console.log('~~~~~~~~~~')
             res
                 .status(201)
                 .location(path.posix.join(req.originalUrl + `${game.id}`))
