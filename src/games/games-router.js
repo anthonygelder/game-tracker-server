@@ -10,7 +10,7 @@ gamesRouter
     .route(`/`)
     // .all(requireAuth)
     .get((req, res, next) => {
-        console.log(req)
+        
         GamesService.getAllGamesByUserId(req.app.get('db'),req.headers.user_id)
             .then(games => {
                 console.log(games)
@@ -19,9 +19,10 @@ gamesRouter
             .catch(next)
         })
     .post( jsonParser, (req, res, next) => {
+        
         const { game, status, year, image } = req.body
         const newGame = { game, status, year, image }
-        console.log(newGame)
+        
         for (const [key, value] of Object.entries(newGame)) {
             if (value == null) {
                 return res.status(400).json({
@@ -29,9 +30,9 @@ gamesRouter
                 })
             }
         }
-
         newGame.user_id = req.body.user_id
-
+        console.log('------------')
+        console.log(newGame)
         GamesService.insertGame(
             req.app.get('db'),
             newGame
