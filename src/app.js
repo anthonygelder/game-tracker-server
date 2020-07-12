@@ -20,6 +20,7 @@ app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
 
 app.use((error, req, res, next) => {
+  console.log('error')
   let response
   if (process.env.NODE_ENV === 'production') {
     response = { error: { message: 'server error' }}
