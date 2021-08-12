@@ -3,6 +3,7 @@ const express = require('express')
 const GamesService = require('./games-service')
 const { requireAuth } = require('../middleware/jwt-auth')
 const xss = require('xss')
+const { Console } = require('console')
 const gamesRouter = express.Router()
 const jsonParser = express.json()
 
@@ -42,6 +43,19 @@ gamesRouter
             })
             .catch(next)
         })
+
+gamesRouter
+    .route('/searchGames')
+    .get((req, res, next) => {
+        console.log('search')
+        fetch(`https://api.rawg.io/api/games?key=a638b5c8919f443c9cce20527693b2cd?search=madden`, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(json => console.log(json))
+        .catch(err => console.error(err));
+
+    })
 
 
 gamesRouter

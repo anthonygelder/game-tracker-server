@@ -10,6 +10,7 @@ const UsersService = {
             .then(user => !!user)
     },
     insertUser(db, newUser) {
+        console.log(db, newUser)
         return db
             .insert(newUser)
             .into('users')
