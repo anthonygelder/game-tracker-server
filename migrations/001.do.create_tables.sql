@@ -10,9 +10,9 @@ CREATE TABLE games (
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    user_name TEXT NOT NULL UNIQUE,
+    user_name TEXT NOT NULL,
     password TEXT NOT NULL,
-    user_email VARCHAR(320),
+    user_email VARCHAR(320) UNIQUE,
     date_created TIMESTAMP NOT NULL DEFAULT now()
 );
 

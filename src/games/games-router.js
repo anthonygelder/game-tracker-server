@@ -6,6 +6,7 @@ const xss = require('xss')
 const { Console } = require('console')
 const gamesRouter = express.Router()
 const jsonParser = express.json()
+const axios = require('axios')
 
 gamesRouter
     .route(`/`)
@@ -18,7 +19,6 @@ gamesRouter
             .catch(next)
         })
     .post( jsonParser, (req, res, next) => {
-        
         const { game, status, year, image } = req.body
         const newGame = { game, status, year, image }
         
@@ -30,11 +30,12 @@ gamesRouter
             }
         }
         newGame.user_id = req.body.user_id
-
+        
         GamesService.insertGame(
             req.app.get('db'),
             newGame
         )
+        
         .then(game => {
             res
                 .status(201)
@@ -47,14 +48,15 @@ gamesRouter
 gamesRouter
     .route('/searchGames')
     .get((req, res, next) => {
-        console.log('search')
-        fetch(`https://api.rawg.io/api/games?key=a638b5c8919f443c9cce20527693b2cd?search=madden`, {
-            method: 'GET'
-        })
-        .then(response => response.json())
-        .then(json => console.log(json))
-        .catch(err => console.error(err));
-
+        axios.get(`https://api.rawg.io/api/games?key=a638b5c8919f443c9cce20527693b2cd&search=${req.headers.game}`)
+            .then(games => {
+                res
+                    .status(201)
+                    .json(games.data.results)
+                })
+                .catch(err => {
+                    console.log(err);
+                });
     })
 
 
