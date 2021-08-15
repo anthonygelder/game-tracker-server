@@ -35,7 +35,7 @@ gamesRouter
             req.app.get('db'),
             newGame
         )
-        
+
         .then(game => {
             res
                 .status(201)
@@ -48,7 +48,7 @@ gamesRouter
 gamesRouter
     .route('/searchGames')
     .get((req, res, next) => {
-        axios.get(`https://api.rawg.io/api/games?key=a638b5c8919f443c9cce20527693b2cd&search=${req.headers.game}`)
+        axios.get(`https://api.rawg.io/api/games?key=${process.env.GAME_SEARCH_API_KEY}&search=${req.headers.game}`)
             .then(games => {
                 res
                     .status(201)
